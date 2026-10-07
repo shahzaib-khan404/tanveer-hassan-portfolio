@@ -429,8 +429,101 @@ section+section{border-top:1px solid var(--bdr);}
   padding:20px 22px;
   transition:border-color .2s,transform .2s,background .2s;
   position:relative;overflow:hidden;
+  cursor:pointer;
 }
 .c-card:hover{background:rgba(255,255,255,0.04);transform:translateY(-3px);}
+.c-card-arrow{
+  position:absolute;bottom:14px;right:16px;
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(255,255,255,0.05);border:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s,border-color .2s,transform .2s;
+  color:var(--t3);
+}
+.c-card:hover .c-card-arrow{background:rgba(255,255,255,0.09);border-color:rgba(255,255,255,0.15);color:var(--t1);transform:translateX(2px);}
+
+/* ─── COURSE MODAL ─── */
+#c-modal-backdrop{
+  position:fixed;inset:0;z-index:900;
+  background:rgba(4,4,12,0.72);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  opacity:0;pointer-events:none;
+  transition:opacity .28s ease;
+}
+#c-modal-backdrop.open{opacity:1;pointer-events:all;}
+#c-modal{
+  position:fixed;top:0;right:0;bottom:0;z-index:901;
+  width:min(520px,100vw);
+  background:rgba(12,12,24,0.98);
+  border-left:1px solid var(--bdr);
+  overflow-y:auto;
+  transform:translateX(100%);
+  transition:transform .32s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+}
+#c-modal.open{transform:translateX(0);}
+.cm-accent{height:3px;border-radius:0;flex-shrink:0;}
+.cm-close{
+  position:absolute;top:18px;right:18px;
+  width:34px;height:34px;border-radius:9px;
+  background:rgba(255,255,255,0.06);border:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--t2);
+  transition:background .18s,color .18s;
+}
+.cm-close:hover{background:rgba(255,255,255,0.11);color:var(--t1);}
+.cm-body{padding:28px 28px 48px;}
+.cm-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+  font-size:.6875rem;font-weight:800;letter-spacing:.06em;
+  width:24px;height:24px;border-radius:7px;
+  margin-bottom:14px;
+}
+.cm-title{
+  font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+  font-size:1.5rem;font-weight:800;letter-spacing:-.03em;
+  color:var(--t1);margin-bottom:8px;line-height:1.15;
+}
+.cm-tagline{font-size:.9375rem;color:var(--t2);line-height:1.65;margin-bottom:20px;}
+.cm-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px;}
+.cm-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 12px;border-radius:20px;
+  background:rgba(255,255,255,0.05);border:1px solid var(--bdr);
+  font-size:.78rem;font-weight:600;color:var(--t2);
+}
+.cm-section{margin-bottom:22px;}
+.cm-section-title{
+  font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+  font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--t3);margin-bottom:10px;
+}
+.cm-list{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.cm-list li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:.875rem;color:var(--t2);line-height:1.5;
+}
+.cm-list li::before{
+  content:'';flex-shrink:0;
+  width:5px;height:5px;border-radius:50%;
+  background:currentColor;opacity:.45;margin-top:7px;
+}
+.cm-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:28px;padding:13px 24px;
+  background:linear-gradient(135deg,var(--ac),var(--ac2));
+  color:#060610;border:none;border-radius:10px;
+  font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+  font-size:.9375rem;font-weight:800;cursor:pointer;
+  text-decoration:none;
+  transition:opacity .18s,transform .15s;
+}
+.cm-cta:hover{opacity:.88;transform:translateY(-1px);}
+@media(max-width:560px){
+  #c-modal{width:100vw;}
+  .cm-body{padding:22px 18px 48px;}
+}
 .c-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:2.5px;
   border-radius:2px 2px 0 0;
@@ -932,7 +1025,7 @@ footer{
 
     <div class="course-g" role="list">
 
-      <div class="c-card rv" role="listitem">
+      <div class="c-card rv" role="listitem" data-course="0" tabindex="0" aria-label="Basic Computer Courses — click for details">
         <div class="c-hd">
           <span class="c-num">01</span>
           <span class="c-title">Basic Computer Courses</span>
@@ -946,9 +1039,10 @@ footer{
           <li>English &amp; Urdu Typing</li>
           <li>Google Workspace</li>
         </ul>
+        <span class="c-card-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
       </div>
 
-      <div class="c-card rv" role="listitem">
+      <div class="c-card rv" role="listitem" data-course="1" tabindex="0" aria-label="Professional / Office Courses — click for details">
         <div class="c-hd">
           <span class="c-num">02</span>
           <span class="c-title">Professional / Office Courses</span>
@@ -963,9 +1057,10 @@ footer{
           <li>Peachtree / Sage</li>
           <li>Digital Documentation</li>
         </ul>
+        <span class="c-card-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
       </div>
 
-      <div class="c-card rv" role="listitem">
+      <div class="c-card rv" role="listitem" data-course="2" tabindex="0" aria-label="Graphic Designing — click for details">
         <div class="c-hd">
           <span class="c-num">03</span>
           <span class="c-title">Graphic Designing</span>
@@ -978,9 +1073,10 @@ footer{
           <li>Logo &amp; Brand Designing</li>
           <li>Social Media Designing</li>
         </ul>
+        <span class="c-card-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
       </div>
 
-      <div class="c-card rv" role="listitem">
+      <div class="c-card rv" role="listitem" data-course="3" tabindex="0" aria-label="Video &amp; Multimedia — click for details">
         <div class="c-hd">
           <span class="c-num">04</span>
           <span class="c-title">Video &amp; Multimedia</span>
@@ -995,9 +1091,10 @@ footer{
           <li>Motion Graphics</li>
           <li>Reels / Shorts Editing</li>
         </ul>
+        <span class="c-card-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
       </div>
 
-      <div class="c-card rv" role="listitem">
+      <div class="c-card rv" role="listitem" data-course="4" tabindex="0" aria-label="AI Courses — click for details">
         <div class="c-hd">
           <span class="c-num">05</span>
           <span class="c-title">AI Courses</span>
@@ -1015,9 +1112,10 @@ footer{
           <li>AI Presentation Making</li>
           <li>AI Automation &amp; Productivity</li>
         </ul>
+        <span class="c-card-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
       </div>
 
-      <div class="c-card rv" role="listitem">
+      <div class="c-card rv" role="listitem" data-course="5" tabindex="0" aria-label="Digital Skills — click for details">
         <div class="c-hd">
           <span class="c-num">06</span>
           <span class="c-title">Digital Skills</span>
@@ -1031,9 +1129,10 @@ footer{
           <li>YouTube Channel Management</li>
           <li>Content Creation</li>
         </ul>
+        <span class="c-card-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
       </div>
 
-      <div class="c-card rv" role="listitem" class="c-card rv c-card--wide" role="listitem">
+      <div class="c-card rv" role="listitem" data-course="6" tabindex="0" aria-label="IT / Technical Courses — click for details">
         <div class="c-hd">
           <span class="c-num">07</span>
           <span class="c-title">IT / Technical Courses</span>
@@ -1053,6 +1152,7 @@ footer{
           <li>Online Applications &amp; Form Submission</li>
           <li>E-Services &amp; Online Documentation</li>
         </ul>
+        <span class="c-card-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
       </div>
 
     </div>
@@ -1129,6 +1229,37 @@ footer{
   </div>
 </section>
 
+<!-- COURSE DETAIL MODAL -->
+<div id="c-modal-backdrop" role="presentation" aria-hidden="true"></div>
+<aside id="c-modal" role="dialog" aria-modal="true" aria-labelledby="cm-title" aria-hidden="true">
+  <div class="cm-accent" id="cm-accent"></div>
+  <button class="cm-close" id="cm-close" aria-label="Close course details">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <div class="cm-body">
+    <div class="cm-num" id="cm-num"></div>
+    <h2 class="cm-title" id="cm-title"></h2>
+    <p class="cm-tagline" id="cm-tagline"></p>
+    <div class="cm-badges" id="cm-badges"></div>
+    <div class="cm-section" id="cm-about-sec">
+      <p class="cm-section-title">About this programme</p>
+      <p id="cm-about" style="font-size:.875rem;color:var(--t2);line-height:1.7;"></p>
+    </div>
+    <div class="cm-section">
+      <p class="cm-section-title">What you will learn</p>
+      <ul class="cm-list" id="cm-topics"></ul>
+    </div>
+    <div class="cm-section" id="cm-skills-sec">
+      <p class="cm-section-title">Skills you'll gain</p>
+      <ul class="cm-list" id="cm-skills"></ul>
+    </div>
+    <a href="#contact" class="cm-cta" id="cm-cta">
+      Enrol Now
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</aside>
+
 <!-- FOOTER -->
 <footer>
   <div class="foot">
@@ -1168,6 +1299,169 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 } else {
   document.querySelectorAll('.rv').forEach(el => el.classList.add('in'));
 }
+
+/* ── Course modal ── */
+const COURSES = [
+  {
+    num:'01', title:'Basic Computer Courses',
+    accent:'#3B82F6', numBg:'rgba(59,130,246,0.15)', numColor:'#60A5FA',
+    tagline:'Start your digital journey from scratch — no experience needed.',
+    duration:'2 – 3 months', level:'Beginner', cert:'Certificate of Completion',
+    about:'This programme builds a solid foundation in computing. Students learn to confidently operate a computer, manage files, use essential office applications, and communicate effectively online. Ideal for anyone stepping into the digital world for the very first time.',
+    topics:[
+      'Computer basics & hardware components','Operating system: Windows & file management',
+      'Microsoft Word — documents, formatting, mail merge','Microsoft Excel — spreadsheets, formulas, charts',
+      'Microsoft PowerPoint — presentations & slide design',
+      'Complete MS Office suite','Internet browsing, email & online communication',
+      'English & Urdu typing (speed & accuracy)','Google Workspace — Docs, Sheets, Slides, Drive'
+    ],
+    skills:['Digital literacy','MS Office proficiency','Email & internet use','Typing speed & accuracy','File organisation']
+  },
+  {
+    num:'02', title:'Professional / Office Courses',
+    accent:'#10B981', numBg:'rgba(16,185,129,0.15)', numColor:'#34D399',
+    tagline:'Master business software and become an indispensable office professional.',
+    duration:'3 – 4 months', level:'Beginner – Intermediate', cert:'Professional Certificate',
+    about:'Designed for those who want to work in offices, businesses, or accounting firms. This track covers advanced productivity tools and computerised accounting software used daily in modern workplaces across Pakistan and globally.',
+    topics:[
+      'Advanced Excel — pivot tables, VLOOKUP, data analysis','Excel for office & business workflows',
+      'Professional data entry techniques & accuracy','Office management & document control',
+      'Computerised accounting fundamentals','QuickBooks — invoicing, payroll, reports',
+      'Peachtree / Sage accounting software','Digital documentation & record keeping'
+    ],
+    skills:['Advanced Excel','Computerised accounting','QuickBooks & Peachtree','Office administration','Data entry precision']
+  },
+  {
+    num:'03', title:'Graphic Designing',
+    accent:'#A855F7', numBg:'rgba(168,85,247,0.15)', numColor:'#C084FC',
+    tagline:'Turn creative ideas into stunning visuals with industry-standard design tools.',
+    duration:'3 – 4 months', level:'Beginner – Intermediate', cert:'Design Certificate',
+    about:'A comprehensive graphic design programme covering the most in-demand tools in the industry. Students learn to create logos, brand identities, marketing materials, and social media graphics — skills that are directly employable and freelanceable.',
+    topics:[
+      'Adobe Photoshop — photo editing & compositing','Adobe Illustrator — vector graphics & illustration',
+      'CorelDRAW — layout design & illustration','Canva — quick professional designs',
+      'Logo design principles & brand identity','Typography & colour theory',
+      'Social media post & story design','Print vs digital design formats',
+      'Building a basic design portfolio'
+    ],
+    skills:['Photoshop','Illustrator','CorelDRAW','Canva','Logo & brand design','Social media graphics']
+  },
+  {
+    num:'04', title:'Video & Multimedia',
+    accent:'#F59E0B', numBg:'rgba(245,158,11,0.15)', numColor:'#FCD34D',
+    tagline:'Create professional video content for YouTube, social media, and beyond.',
+    duration:'3 – 4 months', level:'Beginner – Intermediate', cert:'Multimedia Certificate',
+    about:'Covers the full video production pipeline — from raw footage to a finished, published video. Students learn to edit for YouTube, create engaging Reels and Shorts, and apply professional motion graphics — skills that are in high demand with businesses and content creators.',
+    topics:[
+      'Video editing fundamentals & workflow','Adobe Premiere Pro — professional editing',
+      'Adobe After Effects — motion graphics & visual effects','CapCut — mobile-first editing for Reels & Shorts',
+      'Filmora — beginner-friendly desktop editing','YouTube video editing & optimisation',
+      'Colour grading & audio mixing basics','Animated titles & lower thirds',
+      'Exporting for different platforms'
+    ],
+    skills:['Premiere Pro','After Effects','CapCut','Filmora','Motion graphics','YouTube content editing']
+  },
+  {
+    num:'05', title:'AI Courses',
+    accent:'#0DC5D8', numBg:'rgba(13,197,216,0.15)', numColor:'#0DC5D8',
+    tagline:'Harness artificial intelligence to multiply your productivity and creativity.',
+    duration:'2 – 3 months', level:'All levels', cert:'AI Practitioner Certificate',
+    about:'One of the most future-proof programmes offered at the institute. Students learn to use leading AI tools in real-world workflows — boosting productivity at work, enhancing creative output, and automating repetitive tasks. No coding required.',
+    topics:[
+      'AI fundamentals — how AI works & its applications','Generative AI concepts & use cases',
+      'ChatGPT — prompting, productivity & automation','Google Gemini — AI-assisted research & writing',
+      'AI for office work & report writing','AI for graphic design — Midjourney, Adobe Firefly',
+      'AI video creation tools','AI content & copywriting','AI image generation',
+      'AI-powered presentation making','AI automation & productivity workflows'
+    ],
+    skills:['ChatGPT','Google Gemini','AI image generation','AI content writing','Prompt engineering','Workflow automation']
+  },
+  {
+    num:'06', title:'Digital Skills',
+    accent:'#EC4899', numBg:'rgba(236,72,153,0.15)', numColor:'#F472B6',
+    tagline:'Build an online presence, grow an audience, and earn from the internet.',
+    duration:'3 – 4 months', level:'Beginner – Intermediate', cert:'Digital Marketing Certificate',
+    about:'Covers everything students need to start earning online or help businesses grow digitally. From social media management to freelancing platforms, this programme equips students with practical, job-ready digital marketing and e-commerce skills.',
+    topics:[
+      'Digital marketing fundamentals & strategy','Social media management — Facebook, Instagram, TikTok',
+      'SEO — search engine optimisation basics','Freelancing — Fiverr, Upwork, profile setup',
+      'E-commerce — setting up & managing an online store','YouTube channel creation & management',
+      'Content creation & planning','Paid advertising basics (Meta Ads)'
+    ],
+    skills:['Social media management','SEO','Freelancing','E-commerce','Content creation','Digital marketing strategy']
+  },
+  {
+    num:'07', title:'IT / Technical Courses',
+    accent:'#64748B', numBg:'rgba(100,116,139,0.15)', numColor:'#94A3B8',
+    tagline:'Build hands-on technical skills for IT support, networking, and digital services.',
+    duration:'4 – 6 months', level:'Beginner – Intermediate', cert:'IT Technician Certificate',
+    about:'The most comprehensive programme at the institute, covering hardware, networking, security, and online portal operations. Graduates are prepared for IT support roles in offices, hospitals, government departments, and private businesses.',
+    topics:[
+      'Computer hardware components & assembly','Hardware troubleshooting & repair',
+      'Networking — LAN, Wi-Fi setup & configuration','CCTV installation & configuration',
+      'Windows installation, activation & troubleshooting','Printer, scanner & peripheral troubleshooting',
+      'Basic cyber security & safe digital practices','IT support / Help Desk operations',
+      'Online portal working & e-services','Online portal management',
+      'Government & official portal operations','Online applications & form submission',
+      'E-services & online documentation'
+    ],
+    skills:['Hardware repair','Networking','CCTV setup','Windows admin','IT support','Cyber security basics','Portal operations']
+  }
+];
+
+const backdrop = document.getElementById('c-modal-backdrop');
+const modal    = document.getElementById('c-modal');
+const closeBtn = document.getElementById('cm-close');
+
+function openCourse(idx) {
+  const c = COURSES[idx];
+  document.getElementById('cm-accent').style.background = `linear-gradient(90deg,${c.accent},${c.accent}88,transparent)`;
+  const numEl = document.getElementById('cm-num');
+  numEl.textContent = c.num;
+  numEl.style.background = c.numBg;
+  numEl.style.color = c.numColor;
+  document.getElementById('cm-title').textContent = c.title;
+  document.getElementById('cm-tagline').textContent = c.tagline;
+  document.getElementById('cm-about').textContent = c.about;
+
+  const badges = document.getElementById('cm-badges');
+  badges.innerHTML = [
+    `<span class="cm-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${c.duration}</span>`,
+    `<span class="cm-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>${c.level}</span>`,
+    `<span class="cm-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>${c.cert}</span>`
+  ].join('');
+
+  const topicsEl = document.getElementById('cm-topics');
+  topicsEl.innerHTML = c.topics.map(t => `<li>${t}</li>`).join('');
+
+  const skillsEl = document.getElementById('cm-skills');
+  skillsEl.innerHTML = c.skills.map(s => `<li>${s}</li>`).join('');
+
+  backdrop.classList.add('open');
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden','false');
+  backdrop.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+  closeBtn.focus();
+}
+
+function closeCourse() {
+  backdrop.classList.remove('open');
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden','true');
+  backdrop.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+}
+
+document.querySelectorAll('.c-card[data-course]').forEach(card => {
+  card.addEventListener('click', () => openCourse(+card.dataset.course));
+  card.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();openCourse(+card.dataset.course);}});
+});
+closeBtn.addEventListener('click', closeCourse);
+backdrop.addEventListener('click', closeCourse);
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeCourse(); });
+
+document.getElementById('cm-cta').addEventListener('click', closeCourse);
 
 /* Contact form */
 document.getElementById('cf').addEventListener('submit', e => {
